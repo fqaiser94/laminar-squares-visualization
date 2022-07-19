@@ -31,6 +31,8 @@ object SquaresVisualization {
     svg.svg(
       svg.height := svgSize.toString,
       svg.width := svgSize.toString,
-      child <-- squaresStream.map(makeSvgSquare)
+      children <-- squaresStream
+        .map(makeSvgSquare)
+        .foldLeft(List.empty[ReactiveSvgElement[RectElement]])((acc, square) => acc :+ square)
     )
 }
