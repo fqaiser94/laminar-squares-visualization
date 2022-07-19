@@ -8,11 +8,10 @@ object Main {
     val svgSize = 500
     val squareSize = 50
     val color = Color.black
-    val squares = List(
-      Square(squareSize, Coord(0, 0), color),
-      Square(squareSize, Coord(450, 450), color)
-    )
-    val intervalMs = 1000
+    val range = 1 to svgSize by squareSize
+    val coords = range.flatMap(x => range.map(y => Coord(x, y))).toList
+    val squares = coords.map(coord => Square(squareSize, coord, color))
+    val intervalMs = 10
     val squaresStream = new PeriodicEventStream[List[Square]](
       initial = squares,
       next = {
