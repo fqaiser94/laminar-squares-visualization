@@ -10,7 +10,7 @@ object Main {
     val svgSize = 500
     val squareSize = 50
     val colors = Color.range(Color.black, Color.white)
-    val colorStream: EventStream[Color] = {
+    def colorStream: EventStream[Color] = {
       val intervalMs = 100
       new PeriodicEventStream[List[Color]](
         colors,
