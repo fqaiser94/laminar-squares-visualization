@@ -10,8 +10,25 @@ object SquaresVisualization {
   object Color {
     val white: Color = Color(255, 255, 255)
     val black: Color = Color(0, 0, 0)
+    def range(
+        startColor: Color,
+        endColor: Color,
+        range: Int = 100
+    ): List[Color] = {
+      val incrementFactorR = (endColor.r - startColor.r) / range
+      val incrementFactorG = (endColor.g - startColor.g) / range
+      val incrementFactorB = (endColor.b - startColor.b) / range
+
+      (0 to range).map { idx =>
+        Color(
+          r = startColor.r + (incrementFactorR * idx),
+          g = startColor.g + (incrementFactorG * idx),
+          b = startColor.b + (incrementFactorB * idx)
+        )
+      }.toList
+    }
   }
-  case class Square(size: Int, coord: Coord, color: Color)
+  case class Square(size: Int, coord: Coord, colorStream: EventStream[Color])
 
   def makeSvgSquare(square: Square): ReactiveSvgElement[RectElement] =
     svg.rect(
@@ -21,7 +38,7 @@ object SquaresVisualization {
       svg.height := square.size.toString,
       svg.width := square.size.toString,
       svg.stroke := Color.white.toRGB,
-      svg.fill := square.color.toRGB
+      svg.fill <-- square.colorStream.map(_.toRGB)
     )
 
   def svgElement(
