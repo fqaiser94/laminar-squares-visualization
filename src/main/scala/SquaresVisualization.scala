@@ -26,11 +26,11 @@ object SquaresVisualization {
 
   def svgElement(
       svgSize: Int,
-      square: Square
+      squaresStream: EventStream[Square]
   ): ReactiveSvgElement[SVG] =
     svg.svg(
       svg.height := svgSize.toString,
       svg.width := svgSize.toString,
-      makeSvgSquare(square)
+      child <-- squaresStream.map(makeSvgSquare)
     )
 }
